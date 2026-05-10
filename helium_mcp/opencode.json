@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "helium-browser": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "helium_mcp.server"],
+      "workdir": "/var/home/i/Desktop/helium_mcp"
+    }
+  }
+}
