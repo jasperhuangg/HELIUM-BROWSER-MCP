@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Helium MCP pairing</title>
+</head>
+<body>
+  <h1>Helium MCP tab groups</h1>
+  <p>Use <code>get_tab_group_pairing_info</code> in your MCP client to get the local port and pairing token.</p>
+  <p>This extension manages tabs and groups. It does not read page content or cookies, and does not require remote debugging.</p>
+  <form id="pairing">
+    <p><label>Local port <input id="port" type="number" min="1024" max="65535" value="37454" required></label></p>
+    <p><label>Pairing token <input id="token" type="password" minlength="32" required autocomplete="off" size="48"></label></p>
+    <button type="submit">Save and connect</button>
+  </form>
+  <p role="status" id="status">Not connected</p>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

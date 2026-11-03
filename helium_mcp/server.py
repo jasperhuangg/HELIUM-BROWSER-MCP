@@ -6,9 +6,11 @@ from typing import Any, Optional
 
 import aiohttp
 import websockets
-from mcp.server import InitializationOptions, Server
+from mcp.server import InitializationOptions, NotificationOptions, Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
+
+from helium_mcp.tab_groups import TOOLS as TAB_GROUP_TOOLS, TOOL_NAMES as TAB_GROUP_TOOL_NAMES, TabGroupBridge
 
 
 class HeliumCDP:
@@ -558,11 +560,13 @@ class HeliumCDP:
 
 cdp: Optional[HeliumCDP] = None
 app = Server("helium-browser")
+tab_groups = TabGroupBridge()
 
 
 @app.list_tools()
 async def list_tools() -> list[Tool]:
     return [
+        *TAB_GROUP_TOOLS,
         Tool(
             name="connect",
             description="Connect to Helium/Chrome browser via CDP (must be started with --remote-debugging-port=9222)",
@@ -909,6 +913,10 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     global cdp
 
     try:
+        if name in TAB_GROUP_TOOL_NAMES:
+            result = await tab_groups.invoke(name, arguments)
+            return [TextContent(type="text", text=json.dumps(result, indent=2))]
+
         if name == "connect":
             cdp = HeliumCDP()
             target = await cdp.connect(
@@ -1115,12 +1123,16 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
 async def main():
     server_options = InitializationOptions(
         server_name="helium-browser",
-        server_version="0.1.0",
-        capabilities={},
+        server_version="0.2.0",
+        capabilities=app.get_capabilities(notification_options=NotificationOptions(), experimental_capabilities={}),
     )
-    async with stdio_server() as streams:
+    async with tab_groups, stdio_server() as streams:
         await app.run(streams[0], streams[1], server_options)
 
 
-if __name__ == "__main__":
+def run():
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    run()

@@ -1,18 +1,18 @@
 [project]
 name = "helium-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "MCP server for Helium browser automation"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "mcp>=1.0.0",
+    "mcp>=1.0.0,<2",
     "websockets>=12.0",
     "aiohttp>=3.9.0",
     "pillow>=10.0.0",
 ]
 
 [project.scripts]
-helium-mcp = "helium_mcp.server:main"
+helium-mcp = "helium_mcp.server:run"
 
 [build-system]
 requires = ["hatchling"]

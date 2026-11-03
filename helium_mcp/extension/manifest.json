@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Helium MCP Tab Groups",
+  "version": "0.2.0",
+  "description": "Manage native Helium tabs and tab groups through a paired, local MCP server.",
+  "minimum_chrome_version": "120",
+  "permissions": ["tabs", "tabGroups", "storage", "alarms"],
+  "host_permissions": ["http://127.0.0.1/*"],
+  "incognito": "not_allowed",
+  "background": {"service_worker": "background.js", "type": "module"},
+  "options_page": "options.html",
+  "action": {"default_title": "Helium MCP pairing"},
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'self' ws://127.0.0.1:*"
+  }
+}
